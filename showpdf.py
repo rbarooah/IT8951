@@ -15,15 +15,19 @@ with tempfile.NamedTemporaryFile(suffix='.bmp', delete=False) as temp_bmp:
 
 # Convert PDF to PNG using pdftocairo
 png_filename = bmp_filename.replace('.bmp', '.png')
-result = subprocess.run(['pdftocairo', '-png', '-singlefile', '-f', '1', '-l', '1', '-r', '300', pdf_path, png_filename])
+result = subprocess.run(['pdftocairo', '-png', '-singlefile', '-f', '1', '-l', '1', '-r', '300', pdf_path, png_filename], capture_output=True, text=True)
 if result.returncode != 0:
     print("Error: pdftocairo failed to generate PNG.")
+    print("Output:", result.stdout)
+    print("Error:", result.stderr)
     sys.exit(1)
 
 # Convert PNG to BMP using ImageMagick's convert command
-result = subprocess.run(['convert', png_filename, bmp_filename])
+result = subprocess.run(['convert', png_filename, bmp_filename], capture_output=True, text=True)
 if result.returncode != 0:
     print("Error: convert failed to generate BMP.")
+    print("Output:", result.stdout)
+    print("Error:", result.stderr)
     sys.exit(1)
 
 # Execute render_bmp
