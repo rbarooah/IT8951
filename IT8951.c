@@ -549,7 +549,13 @@ uint8_t IT8951_Init()
 
 	//Get Device Info
 	GetIT8951SystemInfo(&gstI80DevInfo);
-	
+
+	if (gstI80DevInfo.usImgBufAddrL == 0 && gstI80DevInfo.usImgBufAddrH == 0)
+	{
+		printf("Error: Image buffer address is zero. Initialization failed.\n");
+		return 1;
+	}
+
 	gpFrameBuf = malloc(gstI80DevInfo.usPanelW * gstI80DevInfo.usPanelH);
 	if (!gpFrameBuf)
 	{
@@ -866,4 +872,3 @@ void IT8951Display1bppExample2()
     //e.g. if we want to set b0(Background color) for Black-0x00 , Set b1(Foreground) for White-0xFF
     IT8951DisplayArea1bpp(0,0, gstI80DevInfo.usPanelW, gstI80DevInfo.usPanelH, 0, 0x00, 0xFF);
 }
-
