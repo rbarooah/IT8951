@@ -14,7 +14,7 @@ png_filename = 'output.png'
 bmp_filename = 'output.bmp'
 
 # Convert PDF to PNG using pdftocairo
-result = subprocess.run(['pdftocairo', '-png', '-singlefile', '-f', '1', '-l', '1', '-r', '300', pdf_path, png_filename], capture_output=True, text=True)
+result = subprocess.run(['pdftocairo', '-png', '-singlefile', '-f', '1', '-l', '1', '-r', '300', pdf_path, 'output'], capture_output=True, text=True)
 if result.returncode != 0:
     print("Error: pdftocairo failed to generate PNG.")
     print("Output:", result.stdout)
