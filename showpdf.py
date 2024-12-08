@@ -9,12 +9,11 @@ if len(sys.argv) != 2:
 
 pdf_path = sys.argv[1]
 
-# Create a temporary BMP file
-with tempfile.NamedTemporaryFile(suffix='.bmp', delete=False) as temp_bmp:
-    bmp_filename = temp_bmp.name
+# Define output filenames
+png_filename = 'output.png'
+bmp_filename = 'output.bmp'
 
 # Convert PDF to PNG using pdftocairo
-png_filename = bmp_filename.replace('.bmp', '.png')
 result = subprocess.run(['pdftocairo', '-png', '-singlefile', '-f', '1', '-l', '1', '-r', '300', pdf_path, png_filename], capture_output=True, text=True)
 if result.returncode != 0:
     print("Error: pdftocairo failed to generate PNG.")
