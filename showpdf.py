@@ -14,7 +14,7 @@ with tempfile.NamedTemporaryFile(suffix='.bmp', delete=False) as temp_bmp:
     bmp_filename = temp_bmp.name
 
 # Convert PDF to BMP using pdftocairo
-subprocess.run(['pdftocairo', '-bmp', '-singlefile', '-scale-to', '1872', '-scale-to-y', '1404', pdf_path, bmp_filename[:-4]])
+subprocess.run(['pdftocairo', '-bmp', '-singlefile', '-f', '1', '-l', '1', '-r', '300', pdf_path, bmp_filename[:-4]])
 
 # Execute render_bmp
 subprocess.run(['./render_bmp', '0', '0', bmp_filename])
