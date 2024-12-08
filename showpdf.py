@@ -21,8 +21,8 @@ if result.returncode != 0:
     print("Error:", result.stderr)
     sys.exit(1)
 
-# Convert PNG to BMP using ImageMagick's convert command
-result = subprocess.run(['convert', png_filename, bmp_filename], capture_output=True, text=True)
+# Convert PNG to BMP with rotation using ImageMagick's convert command
+result = subprocess.run(['convert', png_filename, '-rotate', '90', bmp_filename], capture_output=True, text=True)
 if result.returncode != 0:
     print("Error: convert failed to generate BMP.")
     print("Output:", result.stdout)
