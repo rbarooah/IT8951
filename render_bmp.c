@@ -5,6 +5,7 @@
 
 int main (int argc, char *argv[])
 {
+    IT8951DevInfo devInfo;
     int retries = 0;
     while (retries < MAX_RETRIES)
     {
@@ -16,7 +17,17 @@ int main (int argc, char *argv[])
         }
         else
         {
-            break; // Initialization successful
+            GetIT8951SystemInfo(&devInfo);
+            if (devInfo.usImgBufAddrL == 0 && devInfo.usImgBufAddrH == 0)
+            {
+                printf("Image buffer address is zero, retrying... (%d/%d)\n", retries + 1, MAX_RETRIES);
+                retries++;
+                sleep(1);
+            }
+            else
+            {
+                break; // Initialization successful
+            }
         }
     }
 
