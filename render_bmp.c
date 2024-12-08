@@ -17,17 +17,7 @@ int main (int argc, char *argv[])
         }
         else
         {
-            GetIT8951SystemInfo(&devInfo);
-            if (devInfo.usImgBufAddrL == 0 && devInfo.usImgBufAddrH == 0)
-            {
-                printf("Image buffer address is zero, retrying... (%d/%d)\n", retries + 1, MAX_RETRIES);
-                retries++;
-                sleep(1);
-            }
-            else
-            {
-                break; // Initialization successful
-            }
+            break; // Initialization successful
         }
     }
 
