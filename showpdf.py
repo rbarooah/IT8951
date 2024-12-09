@@ -21,7 +21,7 @@ try:
         sys.exit(1)
     
     # Get first page and rotate it
-    image = pages[0].rotate(270, expand=True)
+    image = pages[0].rotate(90, expand=True)
     
     # Save as BMP
     image.save(bmp_filename, 'BMP')
