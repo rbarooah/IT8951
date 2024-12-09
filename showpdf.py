@@ -1,7 +1,8 @@
 import sys
-import subprocess
 import os
-import tempfile
+from pdf2image import convert_from_path
+from PIL import Image
+import subprocess
 
 if len(sys.argv) != 2:
     print("Usage: python3 showpdf.py <path_to_pdf>")
@@ -9,34 +10,29 @@ if len(sys.argv) != 2:
 
 pdf_path = sys.argv[1]
 
-# Define output filenames
-png_filename = 'output.png'
+# Define output filename
 bmp_filename = 'output.bmp'
 
-# Convert PDF to PNG using pdftocairo
-result = subprocess.run(['pdftocairo', '-png', '-singlefile', '-f', '1', '-l', '1', '-r', '300', pdf_path, 'output'], capture_output=True, text=True)
-if result.returncode != 0:
-    print("Error: pdftocairo failed to generate PNG.")
-    print("Output:", result.stdout)
-    print("Error:", result.stderr)
-    sys.exit(1)
+try:
+    # Convert PDF to image using pdf2image (first page only)
+    pages = convert_from_path(pdf_path, first_page=1, last_page=1, dpi=300)
+    if not pages:
+        print("Error: Failed to convert PDF to image.")
+        sys.exit(1)
+    
+    # Get first page and rotate it
+    image = pages[0].rotate(270, expand=True)
+    
+    # Save as BMP
+    image.save(bmp_filename, 'BMP')
+    
+    # Execute render_bmp
+    result = subprocess.run(['./render_bmp', '0', '0', bmp_filename])
+    if result.returncode != 0:
+        print("Error: render_bmp failed.")
+        sys.exit(1)
 
-# Convert PNG to BMP with rotation using ImageMagick's convert command
-result = subprocess.run(['convert', png_filename, '-rotate', '270', bmp_filename], capture_output=True, text=True)
-if result.returncode != 0:
-    print("Error: convert failed to generate BMP.")
-    print("Output:", result.stdout)
-    print("Error:", result.stderr)
-    sys.exit(1)
-
-# Execute render_bmp
-result = subprocess.run(['./render_bmp', '0', '0', bmp_filename])
-if result.returncode != 0:
-    print("Error: render_bmp failed.")
-    sys.exit(1)
-
-# Clean up temporary files
-if os.path.exists(png_filename):
-    os.remove(png_filename)
-if os.path.exists(bmp_filename):
-    os.remove(bmp_filename)
+finally:
+    # Clean up temporary file
+    if os.path.exists(bmp_filename):
+        os.remove(bmp_filename)
